@@ -26,6 +26,7 @@ public class Main {
 
 
         Streams.of(names)
+                .map(String::toUpperCase)
                 .flatMap(name -> {
                     List<String> strings = Arrays.asList(name, String.valueOf(name.length()));
                     return Streams.of(strings);
