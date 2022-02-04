@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class RealStreamApiTests {
 
@@ -53,6 +54,13 @@ public class RealStreamApiTests {
                 .findFirst();
 
         Assertions.assertEquals(Optional.of("SHERLOCK"), firstName);
+    }
+
+    @Test
+    public void flatMap() {
+        names.stream()
+                .flatMap(name -> Stream.of(name, String.valueOf(name.length())))
+                .forEach(System.out::println);
     }
 
 

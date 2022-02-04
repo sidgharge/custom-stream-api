@@ -38,6 +38,9 @@ public class FilterStream<T> extends AbstractLazyStream<T> implements Stream<T> 
 
             @Override
             public boolean hasNext() {
+                if(next != null) {
+                    return true;
+                }
                 while (prevIterator.hasNext()) {
                     T t = prevIterator.next();
                     if(predicate.test(t)) {
@@ -50,7 +53,9 @@ public class FilterStream<T> extends AbstractLazyStream<T> implements Stream<T> 
 
             @Override
             public T next() {
-                return next;
+                T temp = next;
+                next = null;
+                return temp;
             }
         };
     }

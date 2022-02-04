@@ -21,6 +21,11 @@ public abstract class AbstractLazyStream<T> implements Stream<T> {
     }
 
     @Override
+    public <R> Stream<R> flatMap(Function<T, Stream<R>> function) {
+        return new FlatMapStream<>(this, function);
+    }
+
+    @Override
     public Stream<T> peek(Consumer<T> consumer) {
         return new PeekStream<>(this, consumer);
     }
@@ -40,7 +45,7 @@ public abstract class AbstractLazyStream<T> implements Stream<T> {
     }
 
     @Override
-    public void foreach(Consumer<T> consumer) {
+    public void forEach(Consumer<T> consumer) {
         iterate().forEachRemaining(consumer);
     }
 }
