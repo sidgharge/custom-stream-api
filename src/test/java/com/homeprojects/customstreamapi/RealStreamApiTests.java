@@ -63,6 +63,25 @@ public class RealStreamApiTests {
                 .forEach(System.out::println);
     }
 
+    @Test
+    public void reduce() {
+        Optional<String> reduce = names.stream()
+                .filter(name -> name.length() < 5)
+                .map(String::toUpperCase)
+                .reduce((s1, s2) -> s1 + ", " + s2);
+
+        Assertions.assertEquals(Optional.of("JOHN"), reduce);
+    }
+
+
+    @Test
+    public void reduce2() {
+        Integer reduce = names.stream()
+                .map(String::toUpperCase)
+                .reduce(0, (prev, s) -> prev + s.length(), (a, b) -> a + b);
+
+        Assertions.assertEquals(19, reduce);
+    }
 
     @Test
     public void notActivatedStream() {

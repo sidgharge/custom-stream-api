@@ -4,9 +4,7 @@ import com.homeprojects.customstreamapi.stream.Stream;
 
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 
 public abstract class AbstractLazyStream<T> implements Stream<T> {
 
@@ -47,5 +45,31 @@ public abstract class AbstractLazyStream<T> implements Stream<T> {
     @Override
     public void forEach(Consumer<T> consumer) {
         iterate().forEachRemaining(consumer);
+    }
+
+    @Override
+    public Optional<T> reduce(BinaryOperator<T> accumulator) {
+        T result = null;
+        Iterator<T> iterator = iterate();
+        while (iterator.hasNext()) {
+            T next = iterator.next();
+            if(result == null) {
+                result = next;
+            } else {
+                result = accumulator.apply(result, next);
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public <R> R reduce(R identity, BiFunction<R, T, R> accumulator) {
+        R result = identity;
+        Iterator<T> iterator = iterate();
+        while (iterator.hasNext()) {
+            T next = iterator.next();
+            result = accumulator.apply(result, next);
+        }
+        return result;
     }
 }

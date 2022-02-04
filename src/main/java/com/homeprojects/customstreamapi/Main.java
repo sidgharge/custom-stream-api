@@ -3,7 +3,10 @@ package com.homeprojects.customstreamapi;
 import com.homeprojects.customstreamapi.stream.Streams;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class Main {
 
@@ -25,13 +28,18 @@ public class Main {
 //        System.out.println(first);
 
 
-        Streams.of(names)
+//        BiFunction<Integer, String, Integer> fn = (String s1, String s2) -> s1.length() + s2.length();
+        Optional<String> reduce = Streams.of(names)
+                .filter(s -> s.length() > 4)
                 .map(String::toUpperCase)
-                .flatMap(name -> {
-                    List<String> strings = Arrays.asList(name, String.valueOf(name.length()));
-                    return Streams.of(strings);
-                })
-                .skip(1)
-                .forEach(System.out::println);
+                .reduce((s1, s2) -> s1.concat(", " + s2));
+
+        Integer reduce2 = Streams.of(names)
+//                .filter(s -> s.length() > 10)
+                .map(String::toUpperCase)
+                .reduce(10, (prev, s) -> prev + s.length());
+
+        System.out.println(reduce2);
+
     }
 }
