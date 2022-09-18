@@ -1,9 +1,14 @@
 package com.homeprojects.customstreamapi.stream.lazy;
 
 import com.homeprojects.customstreamapi.stream.Stream;
+import com.homeprojects.customstreamapi.stream.collectors.Collector;
+import com.homeprojects.customstreamapi.stream.collectors.ListCollector;
+import com.homeprojects.customstreamapi.stream.collectors.SetCollector;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.*;
 
 public abstract class AbstractLazyStream<T> implements Stream<T> {
@@ -71,5 +76,26 @@ public abstract class AbstractLazyStream<T> implements Stream<T> {
             result = accumulator.apply(result, next);
         }
         return result;
+    }
+
+    @Override
+    public List<T> toList() {
+        return collect(new ListCollector<>());
+    }
+
+    @Override
+    public Set<T> toSet() {
+        return collect(new SetCollector<>());
+    }
+
+    @Override
+    public <C, R> R collect(Collector<C, T, R> collector) {
+        C collection = collector.initializer().get();
+        Iterator<T> iterator = iterate();
+        BiConsumer<C, T> accumulator = collector.accumulator();
+        iterator.forEachRemaining(item -> accumulator.accept(collection, item));
+
+        Function<C, R> finisher = collector.finisher();
+        return finisher.apply(collection);
     }
 }

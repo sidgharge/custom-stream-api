@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ImplementedStreamApiTests {
+public class ImplementedStreamApiOperatorsTests {
 
     private final List<String> names = Arrays.asList("Sherlock", "John", "Mycroft");
 

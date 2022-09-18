@@ -17,11 +17,6 @@ public class FilterStream<T> extends AbstractLazyStream<T> implements Stream<T> 
         this.predicate = predicate;
     }
 
-//    @Override
-//    public void foreach(Consumer<T> consumer) {
-//        prevStream.foreach(t -> consumer(consumer, t));
-//    }
-
     private void consumer(Consumer<T> consumer, T t) {
         if(predicate.test(t)) {
             consumer.accept(t);
